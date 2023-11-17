@@ -4,11 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poo.financial.model.ExpenseCategory;
-import com.poo.financial.model.IncomeCategory;
 import com.poo.financial.model.Transaction;
 import com.poo.financial.service.FinancialManager;
 
@@ -35,13 +35,31 @@ public class FinancialController {
         return new ResponseEntity<>(new ArrayList<>(transactions), HttpStatus.OK);
     }
 
-    @PostMapping("/api/income")
-    public void addIncome(double amount, Date date, IncomeCategory category) {
-        FinancialManager.addTransaction(amount, date, category);
+    @PostMapping("api/income")
+    public ResponseEntity<?> addIncome(@RequestBody double amount, Date date, ExpenseCategory category) {
+        try {
+            FinancialManager.addTransaction(
+                    amount,
+                    date,
+                    category);
+
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @PostMapping("/api/expense")
-    public void addExpense(double amount, Date date, ExpenseCategory category) {
-        FinancialManager.addTransaction(amount, date, category);
+    @PostMapping("api/expense")
+    public ResponseEntity<?> addExpense(@RequestBody double amount, Date date, ExpenseCategory category) {
+        try {
+            FinancialManager.addTransaction(
+                    amount,
+                    date,
+                    category);
+
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

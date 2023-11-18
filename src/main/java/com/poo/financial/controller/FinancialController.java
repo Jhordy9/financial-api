@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poo.financial.model.ExpenseCategory;
+import com.poo.financial.model.IncomeCategory;
 import com.poo.financial.model.Transaction;
 import com.poo.financial.service.FinancialManager;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.text.SimpleDateFormat;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
 @RequestMapping("/api")
@@ -54,12 +57,13 @@ public class FinancialController {
     }
 
     @PostMapping("/income")
-    public ResponseEntity<?> addIncome(@RequestBody double amount, Date date, ExpenseCategory category) {
+    public ResponseEntity<?> addIncome(@RequestBody JsonNode incomeData) {
         try {
-            FinancialManager.addTransaction(
-                    amount,
-                    date,
-                    category);
+            double amount = incomeData.get("amount").asDouble();
+            Date date = new SimpleDateFormat("yyyy/MM/dd").parse(incomeData.get("date").asText());
+            IncomeCategory category = IncomeCategory.valueOf(incomeData.get("category").asText());
+
+            FinancialManager.addTransaction(amount, date, category);
 
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
@@ -68,12 +72,13 @@ public class FinancialController {
     }
 
     @PostMapping("/expense")
-    public ResponseEntity<?> addExpense(@RequestBody double amount, Date date, ExpenseCategory category) {
+    public ResponseEntity<?> addExpense(@RequestBody JsonNode incomeData) {
         try {
-            FinancialManager.addTransaction(
-                    amount,
-                    date,
-                    category);
+            double amount = incomeData.get("amount").asDouble();
+            Date date = new SimpleDateFormat("yyyy/MM/dd").parse(incomeData.get("date").asText());
+            ExpenseCategory category = ExpenseCategory.valueOf(incomeData.get("category").asText());
+
+            FinancialManager.addTransaction(amount, date, category);
 
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {

@@ -10,6 +10,7 @@ import java.util.Date;
 
 public class Expense extends Transaction {
   private ExpenseCategory category;
+  public final String type = "DESPESA";
 
   public Expense() {
   }
@@ -24,6 +25,10 @@ public class Expense extends Transaction {
     super(amount, date, id);
     this.setCategory(category);
     save();
+  }
+
+  public String getType() {
+    return type;
   }
 
   public ExpenseCategory getCategory() {

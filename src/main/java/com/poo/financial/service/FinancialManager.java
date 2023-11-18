@@ -11,9 +11,11 @@ import com.poo.financial.model.Transaction;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.ParseException;
+import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 public class FinancialManager {
   private static ArrayList<Transaction> transactions = new ArrayList<>();
@@ -27,14 +29,56 @@ public class FinancialManager {
   }
 
   private static void addExistingTransaction(double amount, Date date, String id, IncomeCategory category) {
-    transactions.add(new Income(amount, date, id, category));
+    Income income = new Income(amount, date, id, category);
+
+    if (transactions.isEmpty()) {
+      income.setBalance(amount);
+    } else {
+      Transaction lastTransaction = transactions.get(transactions.size() - 1);
+
+      income.setBalance(lastTransaction.getBalance() + amount);
+    }
+
+    transactions.add(income);
   }
 
   private static void addExistingTransaction(double amount, Date date, String id, ExpenseCategory category) {
-    transactions.add(new Expense(amount, date, id, category));
+    Expense expense = new Expense(amount, date, id, category);
+
+    if (transactions.isEmpty()) {
+      expense.setBalance(amount);
+    } else {
+      Transaction lastTransaction = transactions.get(transactions.size() - 1);
+
+      expense.setBalance(lastTransaction.getBalance() - amount);
+    }
+
+    transactions.add(expense);
   }
 
-  public static ArrayList<Transaction> getTransactions() throws ParseException {
+  public static ArrayList<Transaction> getTransactions() throws Exception {
+    loadTransactions();
+    return transactions;
+  }
+
+  public static ArrayList<Transaction> getTransactions(String type) throws Exception {
+    loadTransactions();
+    if (type.equalsIgnoreCase("RECEITA")) {
+      return transactions.stream()
+          .filter(t -> t instanceof Income)
+          .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    if (type.equalsIgnoreCase("DESPESA")) {
+      return transactions.stream()
+          .filter(t -> t instanceof Expense)
+          .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    throw new InvalidParameterException("Tipo de transação inválido");
+  }
+
+  private static void loadTransactions() throws Exception {
     String line;
 
     try (BufferedReader br = new BufferedReader(new FileReader("src/main/java/com/poo/financial/model/data.csv"))) {
@@ -75,7 +119,7 @@ public class FinancialManager {
       e.printStackTrace();
     }
 
-    return transactions;
+    Collections.sort(transactions, (t1, t2) -> t2.getDate().compareTo(t1.getDate()));
   }
 
   private static boolean transactionExists(String id) {

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poo.financial.model.ExpenseCategory;
@@ -20,10 +21,15 @@ import java.util.Date;
 @RequestMapping("/api/transactions")
 public class FinancialController {
     @GetMapping
-    public ResponseEntity<ArrayList<Transaction>> getTransactions() {
+    public ResponseEntity<ArrayList<Transaction>> getTransactions(@RequestParam(required = false) String type)
+            throws Exception {
         ArrayList<Transaction> transactions;
         try {
-            transactions = FinancialManager.getTransactions();
+            if (type == null || type.isEmpty()) {
+                transactions = FinancialManager.getTransactions();
+            } else {
+                transactions = FinancialManager.getTransactions(type);
+            }
         } catch (ParseException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

@@ -10,6 +10,7 @@ import java.util.Date;
 
 public class Income extends Transaction {
   private IncomeCategory category;
+  public final String type = "RECEITA";
 
   public Income() {
   }
@@ -24,6 +25,10 @@ public class Income extends Transaction {
     super(amount, date, id);
     this.setCategory(category);
     save();
+  }
+
+  public String getType() {
+    return type;
   }
 
   public IncomeCategory getCategory() {

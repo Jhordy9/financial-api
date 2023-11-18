@@ -14,8 +14,11 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Collections;
 import java.util.stream.Collectors;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 public class FinancialManager {
   private static ArrayList<Transaction> transactions = new ArrayList<>();
@@ -26,6 +29,37 @@ public class FinancialManager {
 
   public static void addTransaction(double amount, Date date, ExpenseCategory category) {
     new Expense(amount, date, category);
+  }
+
+  public static double getBalance() throws Exception {
+    loadTransactions();
+    if (transactions.isEmpty())
+      return 0;
+
+    Transaction lastTransaction = transactions.get(0);
+    return lastTransaction.getBalance();
+  }
+
+  public static double getCurrentBalance() throws Exception {
+    loadTransactions();
+    if (transactions.isEmpty())
+      return 0;
+
+    LocalDate today = LocalDate.now();
+
+    List<Transaction> currentTransactions = transactions.stream()
+        .filter(t -> t.getDate().toInstant()
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+            .isEqual(today))
+        .collect(Collectors.toList());
+
+    if (currentTransactions.isEmpty())
+      return 0;
+
+    Transaction lastTransaction = currentTransactions.get(0);
+
+    return lastTransaction.getBalance();
   }
 
   private static void addExistingTransaction(double amount, Date date, String id, IncomeCategory category) {

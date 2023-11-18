@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/api/transactions")
+@RequestMapping("/api")
 public class FinancialController {
-    @GetMapping
+    @GetMapping("/transactions")
     public ResponseEntity<ArrayList<Transaction>> getTransactions(@RequestParam(required = false) String type)
             throws Exception {
         ArrayList<Transaction> transactions;
@@ -41,7 +41,19 @@ public class FinancialController {
         return new ResponseEntity<>(new ArrayList<>(transactions), HttpStatus.OK);
     }
 
-    @PostMapping("api/income")
+    @GetMapping("/balance")
+    public ResponseEntity<Double> getBalance() throws Exception {
+        double balance = FinancialManager.getBalance();
+        return new ResponseEntity<>(balance, HttpStatus.OK);
+    }
+
+    @GetMapping("/current-balance")
+    public ResponseEntity<Double> getCurrentBalance() throws Exception {
+        double balance = FinancialManager.getCurrentBalance();
+        return new ResponseEntity<>(balance, HttpStatus.OK);
+    }
+
+    @PostMapping("/income")
     public ResponseEntity<?> addIncome(@RequestBody double amount, Date date, ExpenseCategory category) {
         try {
             FinancialManager.addTransaction(
@@ -55,7 +67,7 @@ public class FinancialController {
         }
     }
 
-    @PostMapping("api/expense")
+    @PostMapping("/expense")
     public ResponseEntity<?> addExpense(@RequestBody double amount, Date date, ExpenseCategory category) {
         try {
             FinancialManager.addTransaction(

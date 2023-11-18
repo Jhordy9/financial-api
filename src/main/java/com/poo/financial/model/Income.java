@@ -24,7 +24,6 @@ public class Income extends Transaction {
   public Income(double amount, Date date, String id, IncomeCategory category) {
     super(amount, date, id);
     this.setCategory(category);
-    save();
   }
 
   public String getType() {
@@ -41,7 +40,7 @@ public class Income extends Transaction {
 
   private void save() {
     SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-    File csvFile = new File("data.csv");
+    File csvFile = new File("src/main/java/com/poo/financial/model/data.csv");
     boolean append = csvFile.exists() && csvFile.length() > 0;
 
     try (FileWriter fw = new FileWriter(csvFile, append);

@@ -23,12 +23,12 @@ import java.time.ZoneId;
 public class FinancialManager {
   private static ArrayList<Transaction> transactions = new ArrayList<>();
 
-  public static void addTransaction(double amount, Date date, IncomeCategory category) {
-    new Income(amount, date, category);
+  public static void addTransaction(double amount, Date date, IncomeCategory category, String filePath) {
+    new Income(amount, date, category, filePath);
   }
 
-  public static void addTransaction(double amount, Date date, ExpenseCategory category) {
-    new Expense(amount, date, category);
+  public static void addTransaction(double amount, Date date, ExpenseCategory category, String filePath) {
+    new Expense(amount, date, category, filePath);
   }
 
   public static double getBalance() throws Exception {

@@ -15,10 +15,10 @@ public class Expense extends Transaction {
   public Expense() {
   }
 
-  public Expense(double amount, Date date, ExpenseCategory category) {
+  public Expense(double amount, Date date, ExpenseCategory category, String filePath) {
     super(amount, date);
     this.setCategory(category);
-    save();
+    save(filePath);
   }
 
   public Expense(double amount, Date date, String id, ExpenseCategory category) {
@@ -38,7 +38,7 @@ public class Expense extends Transaction {
     this.category = category;
   }
 
-  private void save() {
+  private void save(String filePath) {
     SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
     File csvFile = new File("src/main/java/com/poo/financial/model/data.csv");
     boolean append = csvFile.exists() && csvFile.length() > 0;

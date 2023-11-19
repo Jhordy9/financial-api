@@ -57,13 +57,13 @@ public class FinancialController {
     }
 
     @PostMapping("/income")
-    public ResponseEntity<?> addIncome(@RequestBody JsonNode incomeData) {
+    public ResponseEntity<?> addIncome(@RequestBody JsonNode income) {
         try {
-            double amount = incomeData.get("amount").asDouble();
-            Date date = new SimpleDateFormat("yyyy/MM/dd").parse(incomeData.get("date").asText());
-            IncomeCategory category = IncomeCategory.valueOf(incomeData.get("category").asText());
+            double amount = income.get("amount").asDouble();
+            Date date = new SimpleDateFormat("yyyy/MM/dd").parse(income.get("date").asText());
+            IncomeCategory category = IncomeCategory.valueOf(income.get("category").asText());
 
-            FinancialManager.addTransaction(amount, date, category);
+            FinancialManager.addTransaction(amount, date, category, "src/main/java/com/poo/financial/model/data.csv");
 
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
@@ -72,13 +72,13 @@ public class FinancialController {
     }
 
     @PostMapping("/expense")
-    public ResponseEntity<?> addExpense(@RequestBody JsonNode incomeData) {
+    public ResponseEntity<?> addExpense(@RequestBody JsonNode expense) {
         try {
-            double amount = incomeData.get("amount").asDouble();
-            Date date = new SimpleDateFormat("yyyy/MM/dd").parse(incomeData.get("date").asText());
-            ExpenseCategory category = ExpenseCategory.valueOf(incomeData.get("category").asText());
+            double amount = expense.get("amount").asDouble();
+            Date date = new SimpleDateFormat("yyyy/MM/dd").parse(expense.get("date").asText());
+            ExpenseCategory category = ExpenseCategory.valueOf(expense.get("category").asText());
 
-            FinancialManager.addTransaction(amount, date, category);
+            FinancialManager.addTransaction(amount, date, category, "src/main/java/com/poo/financial/model/data.csv");
 
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {

@@ -23,12 +23,38 @@ import java.time.ZoneId;
 public class FinancialManager {
   private static ArrayList<Transaction> transactions = new ArrayList<>();
 
-  public static void addTransaction(double amount, Date date, IncomeCategory category, String filePath) {
-    new Income(amount, date, category, filePath);
+  public static void addTransaction(double amount, Date date, IncomeCategory category, String filePath)
+      throws Exception {
+    loadTransactions();
+    Income createIncome = new Income(amount, date, category, filePath);
+
+    if (transactions.isEmpty()) {
+      createIncome.setBalance(amount);
+      transactions.add(createIncome);
+    } else {
+      Transaction lastTransaction = transactions.get(transactions.size() - 1);
+
+      createIncome.setBalance(lastTransaction.getBalance() + amount);
+    }
+
+    transactions.add(createIncome);
   }
 
-  public static void addTransaction(double amount, Date date, ExpenseCategory category, String filePath) {
-    new Expense(amount, date, category, filePath);
+  public static void addTransaction(double amount, Date date, ExpenseCategory category, String filePath)
+      throws Exception {
+    loadTransactions();
+    Expense createExpense = new Expense(amount, date, category, filePath);
+
+    if (transactions.isEmpty()) {
+      createExpense.setBalance(-amount);
+      transactions.add(createExpense);
+    } else {
+      Transaction lastTransaction = transactions.get(transactions.size() - 1);
+
+      createExpense.setBalance(lastTransaction.getBalance() - amount);
+    }
+
+    transactions.add(createExpense);
   }
 
   public static double getBalance() throws Exception {

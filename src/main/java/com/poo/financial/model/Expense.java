@@ -40,7 +40,7 @@ public class Expense extends Transaction {
 
   private void save(String filePath) {
     SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-    File csvFile = new File("src/main/java/com/poo/financial/model/data.csv");
+    File csvFile = new File(filePath);
     boolean append = csvFile.exists() && csvFile.length() > 0;
 
     try (FileWriter fw = new FileWriter(csvFile, append);

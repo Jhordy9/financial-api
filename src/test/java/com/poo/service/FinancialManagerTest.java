@@ -113,7 +113,7 @@ public class FinancialManagerTest {
 
     ArrayList<Transaction> retrievedTransactions = FinancialManager.getTransactions();
 
-    assertEquals(3, retrievedTransactions.size(), "Retrieved transactions should contain the added transactions");
+    assertEquals(2, retrievedTransactions.size(), "Retrieved transactions should contain the added transactions");
   }
 
   @Test
@@ -126,7 +126,7 @@ public class FinancialManagerTest {
 
     ArrayList<Transaction> incomeTransactions = FinancialManager.getTransactions("RECEITA");
 
-    assertEquals(2, incomeTransactions.size(), "Should only retrieve income transactions");
+    assertEquals(1, incomeTransactions.size(), "Should only retrieve income transactions");
     assertTrue(incomeTransactions.get(0) instanceof Income, "Retrieved transaction should be an instance of Income");
   }
 

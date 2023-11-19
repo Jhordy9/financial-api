@@ -30,7 +30,6 @@ public class FinancialManager {
 
     if (transactions.isEmpty()) {
       createIncome.setBalance(amount);
-      transactions.add(createIncome);
     } else {
       Transaction lastTransaction = transactions.get(transactions.size() - 1);
 
@@ -47,7 +46,6 @@ public class FinancialManager {
 
     if (transactions.isEmpty()) {
       createExpense.setBalance(-amount);
-      transactions.add(createExpense);
     } else {
       Transaction lastTransaction = transactions.get(transactions.size() - 1);
 

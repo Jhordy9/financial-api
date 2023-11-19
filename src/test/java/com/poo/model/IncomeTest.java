@@ -41,4 +41,20 @@ public class IncomeTest {
         assertEquals("RECEITA", parts[1], "The second part should be RECEITA");
         assertEquals(category.toString(), parts[2], "The third part should be the category");
     }
+
+    @Test
+    public void testIncomeConstructorWithId() {
+        double expectedAmount = 100.0;
+        Date expectedDate = new Date();
+        String expectedId = "123";
+        IncomeCategory expectedCategory = IncomeCategory.SALARIO;
+
+        Income income = new Income(expectedAmount, expectedDate, expectedId, expectedCategory);
+
+        assertEquals(expectedAmount, income.getAmount(), "Amount should match the expected value");
+        assertEquals(expectedDate, income.getDate(), "Date should match the expected value");
+        assertEquals(expectedId, income.getUuid().toString(), "ID should match the expected value");
+        assertEquals(expectedCategory, income.getCategory(), "Category should match the expected value");
+        assertEquals("RECEITA", income.getType(), "Type should be RECEITA");
+    }
 }

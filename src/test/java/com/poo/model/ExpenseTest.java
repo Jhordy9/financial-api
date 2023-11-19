@@ -41,4 +41,20 @@ public class ExpenseTest {
         assertEquals("DESPESA", parts[1], "The second part should be DESPESA");
         assertEquals(category.toString(), parts[2], "The third part should be the category");
     }
+
+    @Test
+    public void testExpenseConstructorWithId() {
+        double expectedAmount = 100.0;
+        Date expectedDate = new Date();
+        String expectedId = "123";
+        ExpenseCategory expectedCategory = ExpenseCategory.ALIMENTACAO;
+
+        Expense expense = new Expense(expectedAmount, expectedDate, expectedId, expectedCategory);
+
+        assertEquals(expectedAmount, expense.getAmount(), "Amount should match the expected value");
+        assertEquals(expectedDate, expense.getDate(), "Date should match the expected value");
+        assertEquals(expectedId, expense.getUuid().toString(), "ID should match the expected value");
+        assertEquals(expectedCategory, expense.getCategory(), "Category should match the expected value");
+        assertEquals("DESPESA", expense.getType(), "Type should be DESPESA");
+    }
 }

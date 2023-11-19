@@ -20,9 +20,22 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import com.fasterxml.jackson.databind.JsonNode;
 
+/**
+ * Rest Controller that handles financial transactions and balances.
+ * Provides endpoints for retrieving and managing financial records.
+ */
 @RestController
 @RequestMapping("/api")
 public class FinancialController {
+    /**
+     * Retrieves a list of transactions, optionally filtered by type.
+     * 
+     * @param type Optional request parameter to filter transactions by type,
+     *             such as "RECEITA" for income or "DESPESA" for expenses.
+     * @return A {@link ResponseEntity} containing a list of {@link Transaction}
+     *         objects and HTTP status.
+     * @throws Exception If there is a parsing exception or any internal exception.
+     */
     @GetMapping("/transactions")
     public ResponseEntity<ArrayList<Transaction>> getTransactions(@RequestParam(required = false) String type)
             throws Exception {
@@ -44,18 +57,40 @@ public class FinancialController {
         return new ResponseEntity<>(new ArrayList<>(transactions), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves the current balance from all transactions.
+     * 
+     * @return A {@link ResponseEntity} with the current balance as a {@link Double}
+     *         and HTTP status.
+     * @throws Exception If there is an exception while calculating the balance.
+     */
     @GetMapping("/balance")
     public ResponseEntity<Double> getBalance() throws Exception {
         double balance = FinancialManager.getBalance();
         return new ResponseEntity<>(balance, HttpStatus.OK);
     }
 
+    /**
+     * Retrieves the current balance of the day's transactions.
+     * 
+     * @return A {@link ResponseEntity} with the current day's balance as a
+     *         {@link Double} and HTTP status.
+     * @throws Exception If there is an exception while calculating the balance.
+     */
     @GetMapping("/current-balance")
     public ResponseEntity<Double> getCurrentBalance() throws Exception {
         double balance = FinancialManager.getCurrentBalance();
         return new ResponseEntity<>(balance, HttpStatus.OK);
     }
 
+    /**
+     * Adds an income transaction to the financial records.
+     * 
+     * @param income A {@link JsonNode} containing the income data: amount, date,
+     *               and category.
+     * @return A {@link ResponseEntity} with HTTP status indicating the result of
+     *         the operation.
+     */
     @PostMapping("/income")
     public ResponseEntity<?> addIncome(@RequestBody JsonNode income) {
         try {
@@ -71,6 +106,14 @@ public class FinancialController {
         }
     }
 
+    /**
+     * Adds an expense transaction to the financial records.
+     * 
+     * @param expense A {@link JsonNode} containing the expense data: amount, date,
+     *                and category.
+     * @return A {@link ResponseEntity} with HTTP status indicating the result of
+     *         the operation.
+     */
     @PostMapping("/expense")
     public ResponseEntity<?> addExpense(@RequestBody JsonNode expense) {
         try {

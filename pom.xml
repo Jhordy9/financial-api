@@ -74,6 +74,27 @@
 					</image>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>
+					org.apache.maven.plugins
+				</groupId>
+				<artifactId>
+					maven-javadoc-plugin
+				</artifactId>
+				<version>
+					3.3.1
+				</version>
+				<!-- Use the latest version -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>
+								javadoc
+							</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>

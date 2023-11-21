@@ -94,6 +94,7 @@ public class FinancialController {
     @PostMapping("/income")
     public ResponseEntity<?> addIncome(@RequestBody JsonNode income) {
         try {
+
             double amount = Double.parseDouble(income.get("amount").asText());
             Date date = new SimpleDateFormat("yyyy/MM/dd").parse(income.get("date").asText());
             IncomeCategory category = IncomeCategory.valueOf(income.get("category").asText());

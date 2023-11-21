@@ -96,7 +96,7 @@ public class FinancialController {
         try {
 
             double amount = Double.parseDouble(income.get("amount").asText());
-            Date date = new SimpleDateFormat("yyyy/MM/dd").parse(income.get("date").asText());
+            Date date = new SimpleDateFormat("dd/MM/yyyy").parse(income.get("date").asText());
             IncomeCategory category = IncomeCategory.valueOf(income.get("category").asText());
 
             FinancialManager.addTransaction(amount, date, category, "src/main/java/com/poo/financial/model/data.csv");
@@ -119,7 +119,7 @@ public class FinancialController {
     public ResponseEntity<?> addExpense(@RequestBody JsonNode expense) {
         try {
             double amount = Double.parseDouble(expense.get("amount").asText());
-            Date date = new SimpleDateFormat("yyyy/MM/dd").parse(expense.get("date").asText());
+            Date date = new SimpleDateFormat("dd/MM/yyyy").parse(expense.get("date").asText());
             ExpenseCategory category = ExpenseCategory.valueOf(expense.get("category").asText());
 
             FinancialManager.addTransaction(amount, date, category, "src/main/java/com/poo/financial/model/data.csv");

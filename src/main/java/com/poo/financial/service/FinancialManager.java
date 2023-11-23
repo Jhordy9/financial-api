@@ -73,7 +73,7 @@ public class FinancialManager {
 
   public static double getCurrentBalance() throws Exception {
     loadTransactions();
-    LocalDate today = LocalDate.now();
+    LocalDate today = LocalDate.now().plusDays(1);
 
     if (transactions.isEmpty())
       return 0;

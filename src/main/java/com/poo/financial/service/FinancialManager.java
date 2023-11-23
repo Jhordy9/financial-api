@@ -75,6 +75,9 @@ public class FinancialManager {
     loadTransactions();
     LocalDate today = LocalDate.now();
 
+    if (transactions.isEmpty())
+      return 0;
+
     // Use a stream to filter transactions by today's date
     return transactions.stream()
         .filter(t -> t.getDate().toInstant()

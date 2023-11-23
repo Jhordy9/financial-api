@@ -89,7 +89,8 @@ public class FinancialController {
     @PostMapping("/income")
     public ResponseEntity<Void> addIncome(@RequestBody JsonNode income) {
         try {
-            double amount = income.get("amount").asDouble();
+
+            double amount = Double.parseDouble(income.get("amount").asText().replace(",", "."));
             Date date = new SimpleDateFormat("dd/MM/yyyy").parse(income.get("date").asText());
             IncomeCategory category = IncomeCategory.valueOf(income.get("category").asText());
 
@@ -114,7 +115,7 @@ public class FinancialController {
     @PostMapping("/expense")
     public ResponseEntity<Void> addExpense(@RequestBody JsonNode expense) {
         try {
-            double amount = expense.get("amount").asDouble();
+            double amount = Double.parseDouble(expense.get("amount").asText().replace(",", "."));
             Date date = new SimpleDateFormat("dd/MM/yyyy").parse(expense.get("date").asText());
             ExpenseCategory category = ExpenseCategory.valueOf(expense.get("category").asText());
 

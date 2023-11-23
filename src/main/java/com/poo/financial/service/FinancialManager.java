@@ -78,7 +78,6 @@ public class FinancialManager {
     if (transactions.isEmpty())
       return 0;
 
-    // Use a stream to filter transactions by today's date
     return transactions.stream()
         .filter(t -> t.getDate().toInstant()
             .atZone(ZoneId.systemDefault())

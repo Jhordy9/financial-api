@@ -60,30 +60,37 @@ public class FinancialManager {
     if (transactions.isEmpty())
       return 0;
 
-    Transaction lastTransaction = transactions.get(0);
-    return lastTransaction.getBalance();
+    return transactions.stream()
+        .mapToDouble(t -> {
+          if (t instanceof Income) {
+            return t.getAmount();
+          } else if (t instanceof Expense) {
+            return -t.getAmount();
+          }
+          return 0;
+        })
+        .sum();
   }
 
   public static double getCurrentBalance() throws Exception {
     loadTransactions();
-    if (transactions.isEmpty())
-      return 0;
-
     LocalDate today = LocalDate.now();
 
-    List<Transaction> currentTransactions = transactions.stream()
+    // Use a stream to filter transactions by today's date
+    return transactions.stream()
         .filter(t -> t.getDate().toInstant()
             .atZone(ZoneId.systemDefault())
             .toLocalDate()
             .isEqual(today))
-        .collect(Collectors.toList());
-
-    if (currentTransactions.isEmpty())
-      return 0;
-
-    Transaction lastTransaction = currentTransactions.get(0);
-
-    return lastTransaction.getBalance();
+        .mapToDouble(t -> {
+          if (t instanceof Income) {
+            return t.getAmount();
+          } else if (t instanceof Expense) {
+            return -t.getAmount();
+          }
+          return 0;
+        })
+        .sum();
   }
 
   private static void addExistingTransaction(double amount, Date date, String id, IncomeCategory category) {

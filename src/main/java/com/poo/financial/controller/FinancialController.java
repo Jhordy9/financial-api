@@ -15,8 +15,8 @@ import com.poo.financial.model.Transaction;
 import com.poo.financial.service.FinancialManager;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.text.SimpleDateFormat;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -37,24 +37,19 @@ public class FinancialController {
      * @throws Exception If there is a parsing exception or any internal exception.
      */
     @GetMapping("/transactions")
-    public ResponseEntity<ArrayList<Transaction>> getTransactions(@RequestParam(required = false) String type)
-            throws Exception {
-        ArrayList<Transaction> transactions;
+    public ResponseEntity<List<Transaction>> getTransactions(@RequestParam(required = false) String type) {
+        List<Transaction> transactions;
         try {
-            if (type == null || type.isEmpty()) {
-                transactions = FinancialManager.getTransactions();
-            } else {
-                transactions = FinancialManager.getTransactions(type);
-            }
+            transactions = (type == null || type.isEmpty()) ? FinancialManager.getTransactions()
+                    : FinancialManager.getTransactions(type);
         } catch (ParseException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (transactions == null) {
-            transactions = new ArrayList<>();
-        }
-
-        return new ResponseEntity<>(new ArrayList<>(transactions), HttpStatus.OK);
+        return transactions.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
     /**
@@ -92,16 +87,17 @@ public class FinancialController {
      *         the operation.
      */
     @PostMapping("/income")
-    public ResponseEntity<?> addIncome(@RequestBody JsonNode income) {
+    public ResponseEntity<Void> addIncome(@RequestBody JsonNode income) {
         try {
-
-            double amount = Double.parseDouble(income.get("amount").asText());
+            double amount = income.get("amount").asDouble();
             Date date = new SimpleDateFormat("dd/MM/yyyy").parse(income.get("date").asText());
             IncomeCategory category = IncomeCategory.valueOf(income.get("category").asText());
 
             FinancialManager.addTransaction(amount, date, category, "src/main/java/com/poo/financial/model/data.csv");
 
             return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (NumberFormatException | ParseException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -116,15 +112,17 @@ public class FinancialController {
      *         the operation.
      */
     @PostMapping("/expense")
-    public ResponseEntity<?> addExpense(@RequestBody JsonNode expense) {
+    public ResponseEntity<Void> addExpense(@RequestBody JsonNode expense) {
         try {
-            double amount = Double.parseDouble(expense.get("amount").asText());
+            double amount = expense.get("amount").asDouble();
             Date date = new SimpleDateFormat("dd/MM/yyyy").parse(expense.get("date").asText());
             ExpenseCategory category = ExpenseCategory.valueOf(expense.get("category").asText());
 
             FinancialManager.addTransaction(amount, date, category, "src/main/java/com/poo/financial/model/data.csv");
 
             return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (NumberFormatException | ParseException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

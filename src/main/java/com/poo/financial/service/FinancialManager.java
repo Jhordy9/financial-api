@@ -82,7 +82,7 @@ public class FinancialManager {
         .filter(t -> t.getDate().toInstant()
             .atZone(ZoneId.systemDefault())
             .toLocalDate()
-            .isEqual(today))
+            .isBefore(today))
         .mapToDouble(t -> {
           if (t instanceof Income) {
             return t.getAmount();

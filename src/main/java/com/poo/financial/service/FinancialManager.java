@@ -156,7 +156,7 @@ public class FinancialManager {
         String type = values[1];
         String categoryString = values[2];
         Date date = new SimpleDateFormat("dd/MM/yyyy").parse(values[3].trim());
-        double amount = Double.parseDouble(values[4].replace(",", "."));
+        double amount = Double.parseDouble(values[4]);
 
         if (type.equals("RECEITA")) {
           IncomeCategory category = IncomeCategory.valueOf(categoryString);

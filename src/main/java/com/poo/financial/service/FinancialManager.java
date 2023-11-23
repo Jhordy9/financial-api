@@ -11,11 +11,9 @@ import com.poo.financial.model.Transaction;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.stream.Collectors;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
@@ -125,23 +123,6 @@ public class FinancialManager {
   public static ArrayList<Transaction> getTransactions() throws Exception {
     loadTransactions();
     return transactions;
-  }
-
-  public static ArrayList<Transaction> getTransactions(String type) throws Exception {
-    loadTransactions();
-    if (type.equalsIgnoreCase("RECEITA")) {
-      return transactions.stream()
-          .filter(t -> t instanceof Income)
-          .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    if (type.equalsIgnoreCase("DESPESA")) {
-      return transactions.stream()
-          .filter(t -> t instanceof Expense)
-          .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    throw new InvalidParameterException("Tipo de transação inválido");
   }
 
   private static void loadTransactions() throws Exception {
